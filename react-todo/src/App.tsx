@@ -3,12 +3,18 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthPage from './pages/AuthPage';
 import TodoPage from './pages/TodoPage';
 import { supabase } from './lib/supabaseClient';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Container, AppBar, Toolbar, Typography, IconButton, Box, CssBaseline } from '@mui/material';
+import { ThemeProvider, createTheme, Theme } from '@mui/material/styles';
+import { Container, AppBar, Toolbar, Typography, IconButton, Box, CssBaseline, PaletteMode } from '@mui/material';
 import { Brightness4 as Brightness4Icon, Brightness7 as Brightness7Icon, Logout as LogoutIcon } from '@mui/icons-material';
+import { Session } from '@supabase/supabase-js';
 
-function App({ toggleColorMode, theme }) {
-  const [session, setSession] = useState(null);
+interface AppProps {
+  toggleColorMode: () => void;
+  theme: Theme;
+}
+
+function App({ toggleColorMode, theme }: AppProps) {
+  const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -54,7 +60,7 @@ function App({ toggleColorMode, theme }) {
 }
 
 function AppWrapper() {
-  const [mode, setMode] = useState('light');
+  const [mode, setMode] = useState<PaletteMode>('light');
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {

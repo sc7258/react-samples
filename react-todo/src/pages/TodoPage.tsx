@@ -1,37 +1,45 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, SyntheticEvent } from 'react';
 import { supabase } from '../lib/supabaseClient';
 import { 
   Container, Box, Typography, TextField, Button, List, ListItem, 
-  Checkbox, IconButton, ButtonGroup, ListItemText, Snackbar, Alert, CircularProgress
+  Checkbox, IconButton, ButtonGroup, ListItemText, Snackbar, Alert, CircularProgress, AlertColor
 } from '@mui/material';
 import { Delete as DeleteIcon, PlaylistAddCheck as PlaylistAddCheckIcon, Save as SaveIcon } from '@mui/icons-material';
 
+interface Todo {
+  id: number;
+  task: string;
+  is_completed: boolean;
+  inserted_at: string;
+  user_id: string;
+}
+
 const TodoPage = () => {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [task, setTask] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'active', 'completed'
   const [loading, setLoading] = useState(true);
 
   // Editing state
-  const [editingTodoId, setEditingTodoId] = useState(null);
+  const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
   const [editingTaskText, setEditingTaskText] = useState('');
 
   // Snackbar state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState('success'); // 'success' | 'error' | 'info' | 'warning'
+  const [snackbarSeverity, setSnackbarSeverity] = useState<AlertColor>('success'); // 'success' | 'error' | 'info' | 'warning'
 
   useEffect(() => {
     getTodos();
   }, []);
 
-  const showSnackbar = (message, severity = 'success') => {
+  const showSnackbar = (message: string, severity: AlertColor = 'success') => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarOpen(true);
   };
 
-  const handleSnackbarClose = (event, reason) => {
+  const handleSnackbarClose = (event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
@@ -47,7 +55,7 @@ const TodoPage = () => {
     if (error) {
       showSnackbar('Error fetching todos: ' + error.message, 'error');
     } else {
-      setTodos(data || []);
+      setTodos(data as Todo[] || []);
     }
     setLoading(false);
   };
@@ -65,7 +73,7 @@ const TodoPage = () => {
     }
   };
 
-  const toggleTodo = async (id, is_completed) => {
+  const toggleTodo = async (id: number, is_completed: boolean) => {
     const { error } = await supabase.from('todos').update({ is_completed: !is_completed }).match({ id });
     if (error) {
       showSnackbar('Error toggling todo: ' + error.message, 'error');
@@ -75,7 +83,7 @@ const TodoPage = () => {
     }
   };
 
-  const deleteTodo = async (id) => {
+  const deleteTodo = async (id: number) => {
     const { error } = await supabase.from('todos').delete().match({ id });
     if (error) {
       showSnackbar('Error deleting todo: ' + error.message, 'error');
@@ -85,7 +93,7 @@ const TodoPage = () => {
     }
   };
 
-  const handleEditStart = (todo) => {
+  const handleEditStart = (todo: Todo) => {
     setEditingTodoId(todo.id);
     setEditingTaskText(todo.task);
   };
@@ -95,7 +103,7 @@ const TodoPage = () => {
     setEditingTaskText('');
   };
 
-  const handleUpdateTask = async (todoId) => {
+  const handleUpdateTask = async (todoId: number) => {
     if (editingTaskText.trim().length === 0) {
       showSnackbar('Task cannot be empty', 'error');
       return;
@@ -219,4 +227,4 @@ const TodoPage = () => {
   );
 };
 
-export default TodoPage;          
+export default TodoPage;
