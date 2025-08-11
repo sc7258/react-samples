@@ -39,7 +39,7 @@ const TodoPage = () => {
     setSnackbarOpen(true);
   };
 
-  const handleSnackbarClose = (event?: SyntheticEvent | Event, reason?: string) => {
+  const handleSnackbarClose = (_event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
       return;
     }
