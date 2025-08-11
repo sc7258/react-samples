@@ -24,6 +24,17 @@ const AuthPage = () => {
     }
   };
 
+  const signInWithGoogle = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      alert(error.error_description || error.message);
+    }
+  };
+
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -78,8 +89,16 @@ const AuthPage = () => {
               <Button
                 fullWidth
                 onClick={() => setIsLogin(!isLogin)}
+                sx={{ mb: 2 }}
               >
                 {isLogin ? 'Need to create an account?' : 'Already have an account?'}
+              </Button>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={signInWithGoogle}
+              >
+                Sign In with Google
               </Button>
             </Box>
           </CardContent>
