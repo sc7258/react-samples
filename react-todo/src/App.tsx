@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthPage from './pages/AuthPage';
 import TodoPage from './pages/TodoPage';
 import { supabase } from './lib/supabaseClient';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Container, AppBar, Toolbar, Typography } from '@mui/material';
+import { Container, AppBar, Toolbar, Typography, IconButton, Box, CssBaseline } from '@mui/material';
+import { Brightness4 as Brightness4Icon, Brightness7 as Brightness7Icon, Logout as LogoutIcon } from '@mui/icons-material';
 
-const theme = createTheme();
-
-function App() {
+function App({ toggleColorMode, theme }) {
   const [session, setSession] = useState(null);
 
   useEffect(() => {
@@ -23,30 +22,63 @@ function App() {
     return () => subscription.unsubscribe()
   }, [])
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   return (
-    <Container>
+    <Box>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Todo App
           </Typography>
+          <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+            {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          </IconButton>
+          {session && (
+            <IconButton color="inherit" onClick={handleLogout}>
+              <LogoutIcon />
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
-      <main>
+      <Container component="main" sx={{ mt: 4, mb: 4 }}>
         <Routes>
           <Route path="/" element={!session ? <AuthPage /> : <TodoPage />} />
           <Route path="/auth" element={<AuthPage />} />
         </Routes>
-      </main>
-    </Container>
+      </Container>
+    </Box>
   );
 }
 
 function AppWrapper() {
+  const [mode, setMode] = useState('light');
+  const colorMode = useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <App />
+        <CssBaseline />
+        <App toggleColorMode={colorMode.toggleColorMode} theme={theme} />
       </ThemeProvider>
     </BrowserRouter>
   );
