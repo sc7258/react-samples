@@ -1,48 +1,53 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthPage from './pages/AuthPage';
 import TodoPage from './pages/TodoPage';
 import { supabase } from './lib/supabaseClient';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Container, AppBar, Toolbar, Typography } from '@mui/material';
+
+const theme = createTheme();
 
 function App() {
   const [session, setSession] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setSession(session);
-    };
-
-    getSession();
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
+      setSession(session)
+    })
 
-    return () => subscription.unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    if (session) {
-      navigate('/');
-    } else {
-      navigate('/auth');
-    }
-  }, [session, navigate]);
+    return () => subscription.unsubscribe()
+  }, [])
 
   return (
-    <Routes>
-      <Route path="/" element={<TodoPage />} />
-      <Route path="/auth" element={<AuthPage />} />
-    </Routes>
+    <Container>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6">
+            Todo App
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <main>
+        <Routes>
+          <Route path="/" element={!session ? <AuthPage /> : <TodoPage />} />
+          <Route path="/auth" element={<AuthPage />} />
+        </Routes>
+      </main>
+    </Container>
   );
 }
 
 function AppWrapper() {
   return (
     <BrowserRouter>
-      <App />
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
