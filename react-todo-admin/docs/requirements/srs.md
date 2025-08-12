@@ -20,7 +20,7 @@
 ### 2.1. 시스템 아키텍처
 - **프론트엔드:** **React**를 사용한 SPA(Single Page Application)로 개발한다.
 - **백엔드 및 데이터베이스:** **Supabase**를 BaaS로 활용한다. 모든 데이터(사용자, Todo)는 Supabase 내의 PostgreSQL 데이터베이스에 저장되며, 데이터 조작은 Supabase의 PostgREST API를 통해 이루어진다.
-- **UI/UX:** **React 기반의 Admin 템플릿** (예: Material-UI, Ant Design, CoreUI 등)을 사용하여 개발 생산성과 UI 일관성을 높인다.
+- **UI/UX:** **Material-UI(MUI)** 를 주 UI 라이브러리로 사용하며, **'Minimal Dashboard'** 무료 템플릿의 구조와 스타일을 기반으로 개발하여 생산성과 UI 일관성을 높인다.
 
 ### 2.2. 데이터베이스 스키마
 시스템은 `todos` 테이블 하나만 사용하며, 사용자 정보는 `auth.users` 테이블을 직접 참조한다. `profiles`와 같은 별도의 사용자 정보 테이블은 사용하지 않는다.
@@ -77,5 +77,6 @@ create table public.todos (
 - `REQ-SEC-004`: 모든 클라이언트-서버 통신은 HTTPS를 통해 암호화되어야 한다. (Supabase 기본 제공)
 
 ### 4.3. UI/UX
-- `REQ-UI-001`: 반응형 웹 디자인을 적용하여 데스크톱, 태블릿 등 다양한 화면 크기에서 UI가 깨지지 않고 정상적으로 보여야 한다.
+- `REQ-UI-001`: **'Minimal Dashboard'** 템플릿을 기반으로 반응형 웹 디자인을 적용하여 데스크톱, 태블릿 등 다양한 화면 크기에서 UI가 깨지지 않고 정상적으로 보여야 한다.
 - `REQ-UI-002`: 모든 인터랙션(버튼 클릭, 데이터 로딩 등)에 대해 사용자에게 시각적인 피드백(로딩 스피너, 성공/실패 메시지 등)을 제공해야 한다.
+- `REQ-UI-003`: 다크 모드/라이트 모드 전환 기능을 제공해야 한다.
