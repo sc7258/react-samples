@@ -35,7 +35,7 @@ const PrivateRoute: React.FC = () => {
     return <div>Loading...</div>; // 또는 스피너 컴포넌트
   }
 
-  return isAdmin ? <Outlet /> : <Navigate to="/login" />;
+  return isAdmin ? <Outlet /> : <Navigate to="/unauthorized" />;
 };
 
 export default PrivateRoute;

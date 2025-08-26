@@ -27,7 +27,7 @@
     - [x] 'Google 계정으로 로그인' 버튼이 포함된 로그인 UI를 생성합니다.
     - [x] 버튼 클릭 시 Supabase의 `signInWithOAuth` 함수를 호출하여 Google 인증을 처리합니다.
 - [x] **관리자 권한 확인 (Authorization):**
-    - [x] **Supabase Edge Function 생성:** 로그인한 사용자가 관리자인지 확인하는 Edge Function을 만듭니다. 이 함수는 사전에 정의된 관리자 이메일 목록과 로그인한 사용자의 이메일을 비교하여 결과를 반환합니다. (보안상 `service_role` 키가 필요한 작업은 반드시 Edge Function에서 처리)
+    - [x] **Supabase Edge Function 생성:** 로그인한 사용자가 관리자인지 확인하는 Edge Function을 만듭니다. 이 함수는 사용자의 `profiles` 테이블에서 `role` 컬럼이 'admin'인지 확인하여 결과를 반환합니다.
     - [x] **Private Route 구현:** 관리자만 접근할 수 있는 페이지를 위한 `PrivateRoute` 컴포넌트를 구현합니다. 이 컴포넌트는 페이지 로드 시 위에서 만든 Edge Function을 호출하여 관리자 여부를 확인하고, 관리자가 아닐 경우 로그인 페이지로 리디렉션합니다.
 - [x] **로그아웃 기능 구현:**
     - [x] 헤더에 로그아웃 버튼을 추가하고, 클릭 시 `signOut` 함수를 호출하여 세션을 종료시킵니다.

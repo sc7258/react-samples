@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Container, Typography } from '@mui/material';
+import { Button, Box, Typography, Paper, TextField } from '@mui/material';
 import { supabase } from '../supabaseClient';
 
 const Login: React.FC = () => {
+  console.log('Login component rendered');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,22 +38,69 @@ const Login: React.FC = () => {
   };
 
   return (
-    <Container 
+    <Box
       sx={{
-        height: '100vh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#f0f2f5',
       }}
     >
-      <Typography variant="h4" gutterBottom>
-        Todo Admin
-      </Typography>
-      <Button variant="contained" onClick={handleLogin}>
-        Google 계정으로 로그인
-      </Button>
-    </Container>
+      <Paper
+        elevation={3}
+        sx={{
+          p: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          maxWidth: 400,
+          width: '100%',
+        }}
+      >
+        <Typography component="h1" variant="h5">
+          Sign in
+        </Typography>
+        <Box component="form" noValidate sx={{ mt: 1, width: '100%' }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Sign In
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={handleLogin}
+          >
+            Sign in with Google
+          </Button>
+        </Box>
+      </Paper>
+    </Box>
   );
 };
 
