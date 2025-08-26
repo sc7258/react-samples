@@ -1,9 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../supabaseClient';
 import { DataGrid, GridColDef, GridActionsCellItem } from '@mui/x-data-grid';
-import { Button, Box, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Paper } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 const UserList: React.FC = () => {
   const [users, setUsers] = useState([]);
@@ -71,21 +71,36 @@ const UserList: React.FC = () => {
   ];
 
   return (
-    <Box sx={{ height: 600, width: '100%' }}>
-      <Typography variant="h4" gutterBottom>
-        사용자 목록
-      </Typography>
-      <DataGrid
-        rows={users}
-        columns={columns}
-        loading={loading}
-        initialState={{
-          pagination: {
-            paginationModel: { pageSize: 10 },
-          },
-        }}
-        pageSizeOptions={[10]}
-      />
+    <Paper sx={{ p: 2,
+      '& .MuiDataGrid-root': {
+        border: 'none',
+      },
+      '& .MuiDataGrid-cell': {
+        borderBottom: '1px solid #e0e0e0',
+      },
+      '& .MuiDataGrid-columnHeaders': {
+        backgroundColor: '#f5f5f5',
+        borderBottom: '1px solid #e0e0e0',
+      },
+     }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+        <Button variant="contained" startIcon={<AddIcon />}>
+          Create User
+        </Button>
+      </Box>
+      <Box sx={{ height: 600, width: '100%' }}>
+        <DataGrid
+          rows={users}
+          columns={columns}
+          loading={loading}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 10 },
+            },
+          }}
+          pageSizeOptions={[10]}
+        />
+      </Box>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -103,7 +118,7 @@ const UserList: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </Paper>
   );
 };
 

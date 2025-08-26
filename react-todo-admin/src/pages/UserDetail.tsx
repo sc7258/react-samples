@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { Typography, List, ListItem, ListItemText, Paper, TextField, Button, Box, Checkbox, IconButton } from '@mui/material';
+import { Typography, List, ListItem, ListItemText, TextField, Button, Box, Checkbox, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 interface Todo {
@@ -96,7 +95,7 @@ const UserDetail: React.FC = () => {
   }
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Box>
       <Typography variant="h4" gutterBottom>
         Todos for {userEmail}
       </Typography>
@@ -118,8 +117,8 @@ const UserDetail: React.FC = () => {
       <List>
         {todos.length > 0 ? (
           todos.map((todo) => (
-            <ListItem 
-              key={todo.id} 
+            <ListItem
+              key={todo.id}
               divider
               secondaryAction={
                 <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteTodo(todo.id)}>
@@ -127,13 +126,13 @@ const UserDetail: React.FC = () => {
                 </IconButton>
               }
             >
-              <Checkbox 
+              <Checkbox
                 edge="start"
                 checked={todo.is_complete}
                 onChange={() => handleToggleComplete(todo.id, todo.is_complete)}
               />
-              <ListItemText 
-                primary={todo.task} 
+              <ListItemText
+                primary={todo.task}
                 style={{ textDecoration: todo.is_complete ? 'line-through' : 'none' }}
               />
             </ListItem>
@@ -142,7 +141,7 @@ const UserDetail: React.FC = () => {
           <Typography>No todos found for this user.</Typography>
         )}
       </List>
-    </Paper>
+    </Box>
   );
 };
 
